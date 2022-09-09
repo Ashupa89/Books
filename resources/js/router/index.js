@@ -1,7 +1,6 @@
 
 import {createWebHistory, createRouter} from "vue-router";
 
-import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
@@ -10,11 +9,6 @@ import EditBook from '../components/EditBook';
 import AddBook from '../components/AddBook';
 import ViewBook from '../components/ViewBook'
 export const routes = [
-    {
-        name: 'home',
-        path: '/',
-        component: Home
-    },
     {
         name: 'register',
         path: '/register',

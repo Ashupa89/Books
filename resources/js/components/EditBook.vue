@@ -160,9 +160,9 @@
         },
         beforeRouteEnter(to, from, next) {
             if (!window.Laravel.isLoggedin) {
-                window.location.href = "/";
+                window.location.href = "/login";
             } else if (!window.Laravel.isAdmin) {
-                window.location.href = "/";
+                window.location.href = "/login";
             }
             next();
         }

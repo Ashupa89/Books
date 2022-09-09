@@ -4,10 +4,10 @@
             <div class="col-md-8">
                 <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                
+
                     <strong>{{error}}</strong>
                 </div>
-                
+
                 <div class="card card-default">
                     <div class="card-header"><h5>Login</h5></div>
                     <div class="card-body">
@@ -31,7 +31,7 @@
 
                             <div class="form-group row mt-1 mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-success" @click="handleSubmit">
+                                    <button type="submit" class="btn btn-outline-info" @click="handleSubmit">
                                         Login
                                     </button>
                                 </div>
@@ -40,7 +40,7 @@
                             <div class="row mt-1">
                                 <div class="col-md-8 offset-md-4">
                                     <small class="text-muted">
-                                        Don't have any account yet? Please 
+                                        Don't have any account yet? Please
                                         <router-link to="/register" >Register</router-link>
                                     </small>
                                 </div>
@@ -50,7 +50,7 @@
                         </form>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
