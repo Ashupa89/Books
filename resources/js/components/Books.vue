@@ -3,10 +3,29 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header text-center">
-                        <h3 class="text-center">All Books</h3>
+                    <div class="card-header text-right">
+                        <div class="d-flex justify-content-between pb-2 mb-2">
+                            <h3 class="card-title">Books List</h3>
+                            <div>
+                                <router-link :to="{name: 'addbook'}" class="text-right btn btn-outline-primary">Add
+                                    Book
+                                </router-link>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
+                        <div v-if="strSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            <strong>{{strSuccess}}</strong>
+                        </div>
+
+                        <div v-if="strError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            <strong>{{strError}}</strong>
+                        </div>
+
                         <form class="row g-2" @submit.prevent="filterBooks" enctype="multipart/form-data">
                             <div class="form-group mb-4">
                                 <label>Title<span class="text-danger"> *</span>
@@ -57,17 +76,22 @@
                                 <tbody v-if="users && users.data">
                                 <tr v-for="(book,index) in users.data" :key="index">
                                     <td>{{book.id }}</td>
-                                    <td>{{book.title }}</td>
+                                    <td>
+                                        <router-link :to="{name: 'viewbook', params: { id: book.id }}"
+                                        >{{book.title }}
+                                        </router-link>
+                                    </td>
                                     <td>{{book.author }}</td>
                                     <td>{{book.genre }}</td>
                                     <td>{{book.description }}</td>
                                     <td>{{book.isbn }}</td>
-                                    <td><img v-bind:src="'/img/'+ book.image" height="64" width="48" alt=""></td>
+                                    <td><img v-if="book.image" v-bind:src="'/img/'+ book.image" height="64" width="48"
+                                             alt=""></td>
                                     <td>{{book.published }}</td>
                                     <td>{{book.publisher }}</td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <router-link :to="{name: 'editpost', params: { id: book.id }}"
+                                            <router-link :to="{name: 'editbook', params: { id: book.id }}"
                                                          class="btn btn-success">Edit
                                             </router-link>
                                             <button class="btn btn-danger" @click="deleteBook(book.id)">Delete</button>
@@ -111,13 +135,16 @@
                     publishdate: '',
                     genre: '',
                     isbn: ''
-                }
+                },
+                strSuccess: '',
+                strError: '',
             }
         },
         mounted() {
             this.list()
         },
         methods: {
+
             async list(page = 1) {
                 await axios.get(`/api/books?page=${page}&search=${this.search}`).then(({data}) => {
                     this.users = data
@@ -126,12 +153,14 @@
                 })
             },
             async filterBooks(page = 1) {
+                let existingObj = this;
                 await axios.post(`/api/books?page=${page}`,
                     this.filter).then(({data}) => {
                     this.users = data
-                }).catch(({response}) => {
-                    console.error(response)
-                })
+                }).catch(function (error) {
+                    existingObj.strSuccess = "";
+                    existingObj.strError = error.response.data.message;
+                });
             },
             deleteBook(id) {
                 let existingObj = this;
@@ -152,6 +181,13 @@
                         });
                 }
             }
+        }, beforeRouteEnter(to, from, next) {
+            if (!window.Laravel.isLoggedin) {
+                window.location.href = "/";
+            } else if (!window.Laravel.isAdmin) {
+                window.location.href = "/";
+            }
+            next();
         }
     }
 </script>

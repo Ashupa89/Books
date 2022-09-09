@@ -1,68 +1,77 @@
 <template>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header text-right">
+                        <div class="d-flex justify-content-between pb-2 mb-2">
+                            <h3 class="card-title">Add New Book</h3>
+                            <div>
+                                <router-link :to="{name: 'books'}" class="btn btn-outline-secondary">Go Back
+                                </router-link>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div v-if="strSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            <strong>{{strSuccess}}</strong>
+                        </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex justify-content-between pb-2 mb-2">
-                <h5 class="card-title">Add New Book</h5>
-                <div>
-                    <router-link :to="{name: 'books'}" class="btn btn-outline-secondary">Go Back</router-link>
-                </div>
-            </div>
+                        <div v-if="strError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <strong>{{strError}}</strong>
+                        </div>
 
-            <div v-if="strSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong>{{strSuccess}}</strong>
-            </div>
+                        <form class="row g-2" @submit.prevent="addBook" enctype="multipart/form-data">
+                            <div class="form-group mb-2 col-6">
+                                <label>Title</label><span class="text-danger"> *</span>
+                                <input type="text" class="form-control" v-model="title" placeholder="Enter Title">
+                            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Author</label><span class="text-danger"> *</span>
+                                <input type="text" class="form-control" v-model="author" placeholder="Enter Author">
+                            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Genre</label><span class="text-danger"> *</span>
+                                <input type="text" class="form-control" v-model="genre" placeholder="Enter Genre">
+                            </div>
 
-            <div v-if="strError" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong>{{strError}}</strong>
-            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Isbn</label><span class="text-danger"> *</span>
+                                <input type="text" class="form-control" v-model="isbn" placeholder="Enter Isbn">
+                            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Published</label><span class="text-danger"> *</span>
+                                <input type="date" class="form-control" v-model="published"
+                                       placeholder="Enter Published">
+                            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Publisher</label><span class="text-danger"> *</span>
+                                <input type="text" class="form-control" v-model="publisher"
+                                       placeholder="Enter Publisher">
+                            </div>
+                            <div class="form-gorup mb-2 col-6">
+                                <label>Image</label><span class="text-danger"> *</span>
+                                <input type="file" class="form-control mb-2" v-on:change="onChange">
 
-            <form class="row g-2" @submit.prevent="addBook" enctype="multipart/form-data">
-                <div class="form-group mb-2 col-6">
-                    <label>Title</label><span class="text-danger"> *</span>
-                    <input type="text" class="form-control" v-model="title" placeholder="Enter Title">
-                </div>
-                <div class="form-group mb-2 col-6">
-                    <label>Author</label><span class="text-danger"> *</span>
-                    <input type="text" class="form-control" v-model="author" placeholder="Enter Author">
-                </div>
-                <div class="form-group mb-2 col-6">
-                    <label>Genre</label><span class="text-danger"> *</span>
-                    <input type="text" class="form-control" v-model="genre" placeholder="Enter Genre">
-                </div>
-
-                <div class="form-group mb-2 col-6">
-                    <label>Isbn</label><span class="text-danger"> *</span>
-                    <input type="text" class="form-control" v-model="isbn" placeholder="Enter Isbn">
-                </div>
-                <div class="form-group mb-2 col-6">
-                    <label>Published</label><span class="text-danger"> *</span>
-                    <input type="date" class="form-control" v-model="published" placeholder="Enter Published">
-                </div>
-                <div class="form-group mb-2 col-6">
-                    <label>Publisher</label><span class="text-danger"> *</span>
-                    <input type="text" class="form-control" v-model="publisher" placeholder="Enter Publisher">
-                </div>
-                <div class="form-group mb-2 col-12">
-                    <label>Description</label><span class="text-danger"> *</span>
-                    <textarea class="form-control" rows="3" v-model="description"
-                              placeholder="Enter Description"></textarea>
-                </div>
-                <div class="form-gorup mb-2 col-6">
-                    <label>Image</label><span class="text-danger"> *</span>
-                    <input type="file" class="form-control mb-2" v-on:change="onChange">
-
-                    <div v-if="img">
-                        <img v-bind:src="imgPreview" width="100" height="100"/>
+                                <div v-if="img">
+                                    <img v-bind:src="imgPreview" width="100" height="100"/>
+                                </div>
+                            </div>
+                            <div class="form-group mb-2 col-12">
+                                <label>Description</label><span class="text-danger"> *</span>
+                                <textarea class="form-control" rows="3" v-model="description"
+                                          placeholder="Enter Description"></textarea>
+                            </div>
+                            <div class="form-group mb-2 col-12">
+                                <button type="submit" class="btn btn-primary mt-4 mb-4 col-2"> Add Book</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-primary mt-4 mb-4 col-8"> Add Book</button>
-
-            </form>
-
+            </div>
         </div>
     </div>
 </template>
@@ -132,6 +141,8 @@
         },
         beforeRouteEnter(to, from, next) {
             if (!window.Laravel.isLoggedin) {
+                window.location.href = "/";
+            } else if (!window.Laravel.isAdmin) {
                 window.location.href = "/";
             }
             next();

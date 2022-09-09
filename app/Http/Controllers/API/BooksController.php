@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use function PHPUnit\Framework\returnArgument;
 
 class BooksController extends Controller
@@ -24,6 +25,13 @@ class BooksController extends Controller
 
     public function filterBook(Request $key)
     {
+        $key->validate([
+            "title" => 'required|string',
+            "author" => 'string',
+            "genre" => 'string',
+            "isbn" => 'integer',
+            "published" => 'date',
+        ]);
         $book = Book::query();
         if ($key->title) {
             $book->where('title', 'LIKE', "%{$key->title}%");
@@ -98,7 +106,9 @@ class BooksController extends Controller
             $imageName = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $input['image'] = $imageName;
-            unlink('img/' . $book->image);
+            if (File::exists('img/' . $book->image)) {
+                unlink('img/' . $book->image);
+            }
         }
 
         $book->update($input);

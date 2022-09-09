@@ -8,7 +8,7 @@ import Dashboard from '../pages/Dashboard';
 import Books from '../components/Books';
 import EditBook from '../components/EditBook';
 import AddBook from '../components/AddBook';
-
+import ViewBook from '../components/ViewBook'
 export const routes = [
     {
         name: 'home',
@@ -36,12 +36,17 @@ export const routes = [
         component: Books
     },
     {
-        name: 'addpost',
+        name: 'viewbook',
+        path: '/books/view/:id',
+        component: ViewBook
+    },
+    {
+        name: 'addbook',
         path: '/books/add',
         component: AddBook
     },
     {
-        name: 'editpost',
+        name: 'editbook',
         path: '/books/edit/:id',
         component: EditBook
     }

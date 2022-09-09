@@ -1,5 +1,4 @@
 <template>
-    <div class="container">
         <nav class="navbar navbar-expand-sm navbar-light bg-light mb-4">
             <a class="navbar-brand" href="#">Book Management</a>
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
@@ -15,6 +14,7 @@
                 <router-link to="/register" class="nav-item nav-link">Register</router-link>
             </div>
         </nav>
+    <div class="container">
 
 
         <router-view></router-view>

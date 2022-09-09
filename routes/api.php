@@ -31,6 +31,7 @@ Route::group(['prefix' => 'books','middleware' => 'auth:sanctum'], function() {
     Route::post('/', [BooksController::class,'filterBook']);
     Route::post('add', [BooksController::class,'add']);
     Route::post('update/{id}', [BooksController::class,'update']);
-    Route::get('edit/{id}', [BooksController::class,'edit']);
-    Route::delete('delete/{id}', [BooksController::class,'delete']);
+    Route::get('edit/{id}', [BooksController::class, 'edit']);
+    Route::get('view/{id}', [BooksController::class, 'edit']);
+    Route::delete('delete/{id}', [BooksController::class, 'delete']);
 });
