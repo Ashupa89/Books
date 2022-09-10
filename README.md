@@ -67,6 +67,7 @@ password - user
   ```
  Add Book API
   ```sh
+
      POST - 127.0.0.1:8000/api/books/add
    ```
  Edit Book API
@@ -88,6 +89,6 @@ View Book Information API
  #### To API on Postman 
  First generate token by login 
  put into the authorization Bearer token 
-
-
+like below image
+![token passing](https://user-images.githubusercontent.com/37969982/189473869-4c5605e0-1b2a-40b7-9c98-83c3ec0b79e1.png)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
