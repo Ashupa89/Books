@@ -47,7 +47,7 @@
                                        placeholder="Enter Published">
                             </div>
                             <div class="form-group mb-2 col-6">
-                                <label>Publisher</label><span class="text-danger"> *</span>
+                                <label>Publisher</label>
                                 <input type="text" class="form-control" v-model="publisher"
                                        placeholder="Enter Publisher">
                             </div>
@@ -97,14 +97,15 @@
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.get(`/api/books/edit/${this.$route.params.id}`)
                     .then(response => {
-                        this.title = response.data['title'];
-                        this.description = response.data['description'];
-                        this.author = response.data['author'];
-                        this.genre = response.data['genre'];
-                        this.isbn = response.data['isbn'];
-                        this.published = response.data['published'];
-                        this.publisher = response.data['publisher'];
-                        this.img = "/img/" + response.data['image'];
+                        var data = response.data.data;
+                        this.title = data['title'];
+                        this.description = data['description'];
+                        this.author = data['author'];
+                        this.genre = data['genre'];
+                        this.isbn = data['isbn'];
+                        this.published = data['published'];
+                        this.publisher = data['publisher'];
+                        this.img = "/img/" + data['image'];
                         this.imgPreview = this.img;
                     })
                     .catch(function (error) {
@@ -152,7 +153,12 @@
                         })
                         .catch(function (error) {
                             existingObj.strSuccess = "";
-                            existingObj.strError = error.response.data.message;
+                            existingObj.strSuccess = "";
+                            var err = "";
+                            error.response.data.data.forEach(function (key) {
+                                err += key;
+                            });
+                            existingObj.strError = err;
                         });
                 });
             }

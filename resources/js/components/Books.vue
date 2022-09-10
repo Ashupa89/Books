@@ -147,16 +147,16 @@
 
             async list(page = 1) {
                 await axios.get(`/api/books?page=${page}&search=${this.search}`).then(({data}) => {
-                    this.users = data
+                    this.users = data.data;
                 }).catch(({response}) => {
-                    console.error(response)
+                    console.log(response)
                 })
             },
             async filterBooks(page = 1) {
                 let existingObj = this;
                 await axios.post(`/api/books?page=${page}`,
                     this.filter).then(({data}) => {
-                    this.users = data
+                    this.users = data.data;
                 }).catch(function (error) {
                     existingObj.strSuccess = "";
                     existingObj.strError = error.response.data.message;

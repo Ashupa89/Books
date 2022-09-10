@@ -53,7 +53,7 @@
                                        placeholder="Enter Publisher">
                             </div>
                             <div class="form-gorup mb-2 col-6">
-                                <label>Image</label><span class="text-danger"> *</span>
+                                <label>Image</label>
                                 <input type="file" class="form-control mb-2" v-on:change="onChange">
 
                                 <div v-if="img">
@@ -133,7 +133,11 @@
                         })
                         .catch(function (error) {
                             existingObj.strSuccess = "";
-                            existingObj.strError = error.response.data.message;
+                            var err = "";
+                            error.response.data.data.forEach(function (key) {
+                                err += key;
+                            });
+                            existingObj.strError = err;
                         });
                 });
             }

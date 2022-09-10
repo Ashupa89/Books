@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use function PHPUnit\Framework\returnArgument;
+use Validator;
 
-class BooksController extends Controller
+class BooksController extends BaseController
 {
     public function index(Request $request)
     {
@@ -19,19 +19,22 @@ class BooksController extends Controller
             ->orWhere('isbn', 'LIKE', "%{$key}%")
             ->orWhere('genre', 'LIKE', "%{$key}%")
             ->paginate(10)->toArray();
-
-        return array_reverse($book);
+        return $this->sendResponse(array_reverse($book), 'Books retrieved successfully.');
     }
 
-    public function filterBook(Request $key)
+    public function filterBook(Request $request)
     {
-        $key->validate([
+        $validator = Validator::make($request->all(), [
             "title" => 'required|string',
             "author" => 'string',
             "genre" => 'string',
             "isbn" => 'integer',
             "published" => 'date',
         ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $key = $request;
         $book = Book::query();
         if ($key->title) {
             $book->where('title', 'LIKE', "%{$key->title}%");
@@ -48,12 +51,14 @@ class BooksController extends Controller
         if ($key->genre) {
             $book->where('genre', 'LIKE', "%{$key->genre}%");
         }
-        return $book->paginate(10)->toArray();
+
+        return $this->sendResponse(array_reverse($book->paginate(10)->toArray()), 'Books retrieved successfully.');
+
     }
 
     public function add(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             "title" => 'required',
             "author" => 'required',
             "genre" => 'required',
@@ -61,9 +66,11 @@ class BooksController extends Controller
             "isbn" => 'required',
             "published" => 'required',
             "publisher" => 'required',
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors()->all());
+        }
         $input = $request->all();
         $imageName = NULL;
         if ($image = $request->file('file')) {
@@ -73,22 +80,19 @@ class BooksController extends Controller
             $input['image'] = $imageName;
         }
 
-        Book::create($input);
-
-        return response()->json(['success' => 'Book created successfully']);
-
+        $book = Book::create($input);
+        return $this->sendResponse($book, 'Book created successfully.');
     }
 
-    public function edit($id)
+    public function edit(Book $book)
     {
-        $book = Book::find($id);
-        return response()->json($book);
+        return $this->sendResponse($book, 'Book created successfully.');
     }
 
     public function update($id, Request $request)
     {
         $book = Book::find($id);
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             "title" => 'required',
             "author" => 'required',
             "genre" => 'required',
@@ -96,8 +100,11 @@ class BooksController extends Controller
             "isbn" => 'required',
             "published" => 'required',
             "publisher" => 'required',
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors()->all());
+        }
 
         $input = $request->all();
         $imageName = NULL;
@@ -113,15 +120,16 @@ class BooksController extends Controller
 
         $book->update($input);
 
-        return response()->json(['success' => 'Book update successfully']);
+        return $this->sendResponse(null, 'Book updated successfully.');
     }
 
-    public function delete($id)
+    public function delete(Book $book)
     {
-        $book = Book::find($id);
         $book->delete();
-        unlink('img/' . $book->image);
-        return response()->json(['success' => 'Book deleted successfully']);
+        if (File::exists('img/' . $book->image)) {
+            unlink('img/' . $book->image);
+        }
+        return $this->sendResponse(null, 'Book deleted successfully.');
 
     }
 }

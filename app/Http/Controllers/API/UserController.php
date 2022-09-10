@@ -2,24 +2,36 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->messages());
+        }
         $credentials = [
             'email' => $request->email,
             'password' => $request->password
         ];
 
-        if(Auth::attempt($credentials)) {
-            $success = true;
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $success['token'] = $user->createToken('MyApp')->plainTextToken;
+            $success['name'] = $user->name;
+            $success['success'] = true;
             $message = "User login successfully";
         } else {
             $success = false;

@@ -5,7 +5,13 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header text-center">
-                            <h3 class="text-center">Book Information</h3>
+                            <div class="d-flex justify-content-between pb-2 mb-2">
+                                <h3 class="card-title">Book Information</h3>
+                                <div>
+                                    <router-link :to="{name: 'books'}" class="btn btn-outline-secondary">Go Back
+                                    </router-link>
+                                </div>
+                            </div>
                         </div>
                         <form method="post">
                             <div class="row">
@@ -115,14 +121,15 @@
         created() {
             this.$axios.get(`/api/books/view/${this.$route.params.id}`)
                 .then(response => {
-                    this.title = response.data['title'];
-                    this.description = response.data['description'];
-                    this.author = response.data['author'];
-                    this.genre = response.data['genre'];
-                    this.isbn = response.data['isbn'];
-                    this.published = response.data['published'];
-                    this.publisher = response.data['publisher'];
-                    this.img = response.data['image'];
+                    var data = response.data.data;
+                    this.title = data['title'];
+                    this.description = data['description'];
+                    this.author = data['author'];
+                    this.genre = data['genre'];
+                    this.isbn = data['isbn'];
+                    this.published = data['published'];
+                    this.publisher = data['publisher'];
+                    this.img = data['image'];
                     this.imgPreview = this.img;
                 })
                 .catch(function (error) {

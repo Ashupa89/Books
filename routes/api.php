@@ -27,11 +27,11 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'books','middleware' => 'auth:sanctum'], function() {
-    Route::get('/', [BooksController::class,'index']);
-    Route::post('/', [BooksController::class,'filterBook']);
-    Route::post('add', [BooksController::class,'add']);
-    Route::post('update/{id}', [BooksController::class,'update']);
-    Route::get('edit/{id}', [BooksController::class, 'edit']);
-    Route::get('view/{id}', [BooksController::class, 'edit']);
-    Route::delete('delete/{id}', [BooksController::class, 'delete']);
+    Route::get('/', [BooksController::class, 'index']);
+    Route::post('/', [BooksController::class, 'filterBook']);
+    Route::post('add', [BooksController::class, 'add']);
+    Route::post('update/{id}', [BooksController::class, 'update']);
+    Route::get('edit/{book}', [BooksController::class, 'edit']);
+    Route::get('view/{book}', [BooksController::class, 'edit']);
+    Route::delete('delete/{book}', [BooksController::class, 'delete']);
 });
