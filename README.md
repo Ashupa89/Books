@@ -20,9 +20,9 @@ _Below you can follow these steps to install and set up this app._
     Create DATABASE book
    ``` 
  do migrate
-    ```sh
+  ```sh
     php artisan migarte
-    ```     
+  ```     
  Install NPM packages
    ```sh
    npm install
@@ -36,9 +36,9 @@ _Below you can follow these steps to install and set up this app._
    php artisan serve 
    ```
  Open on browser 
-    ```sh
+  ```sh
     127.0.0.1:8000/login 
-    ```
+  ```
 # Login Credentials 
 Admin
 -
