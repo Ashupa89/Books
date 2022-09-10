@@ -7,7 +7,8 @@
                         <div class="d-flex justify-content-between pb-2 mb-2">
                             <h3 class="card-title">Books List</h3>
                             <div>
-                                <router-link :to="{name: 'addbook'}" class="text-right btn btn-outline-primary">Add
+                                <router-link :to="{name: 'addbook'}" v-if="permission"
+                                             class="text-right btn btn-outline-primary">Add
                                     Book
                                 </router-link>
                             </div>
@@ -90,11 +91,13 @@
                                     <td>{{book.published }}</td>
                                     <td>{{book.publisher }}</td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div v-if="permission" class="btn-group" role="group">
                                             <router-link :to="{name: 'editbook', params: { id: book.id }}"
                                                          class="btn btn-success">Edit
                                             </router-link>
-                                            <button class="btn btn-danger" @click="deleteBook(book.id)">Delete</button>
+                                            <button v-if="permission" class="btn btn-danger"
+                                                    @click="deleteBook(book.id)">Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -138,6 +141,7 @@
                 },
                 strSuccess: '',
                 strError: '',
+                permission: window.Laravel.isAdmin
             }
         },
         mounted() {
