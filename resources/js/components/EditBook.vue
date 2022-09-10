@@ -149,7 +149,8 @@
                     this.$axios.post(`/api/books/update/${this.$route.params.id}`, formData, config)
                         .then(response => {
                             existingObj.strError = "";
-                            existingObj.strSuccess = response.data.success;
+                            existingObj.strSuccess = response.data.message;
+                            window.location.href = '/books';
                         })
                         .catch(function (error) {
                             existingObj.strSuccess = "";
