@@ -26,10 +26,10 @@ class BooksController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             "title" => 'required|string',
-            "author" => 'string',
-            "genre" => 'string',
-            "isbn" => 'integer',
-            "published" => 'date',
+            "author" => 'nullable|string',
+            "genre" => 'nullable|string',
+            "isbn" => 'nullable|integer',
+            "publish_date" => 'nullable|date',
         ]);
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
@@ -42,8 +42,8 @@ class BooksController extends BaseController
         if ($key->author) {
             $book->where('author', 'LIKE', "%{$key->author}%");
         }
-        if ($key->published) {
-            $book->where('published', 'LIKE', "%{$key->published}%");
+        if ($key->publish_date) {
+            $book->where('published', 'LIKE', "%{$key->publish_date}%");
         }
         if ($key->isbn) {
             $book->where('isbn', 'LIKE', "%{$key->isbn}%");
@@ -100,7 +100,6 @@ class BooksController extends BaseController
             "isbn" => 'required',
             "published" => 'required',
             "publisher" => 'required',
-            'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors()->all());
@@ -109,6 +108,12 @@ class BooksController extends BaseController
         $input = $request->all();
         $imageName = NULL;
         if ($image = $request->file('file')) {
+            $validator = Validator::make($request->all(), [
+                'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->sendError('Validation Error.', $validator->errors()->all());
+            }
             $destinationPath = 'img/';
             $imageName = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
