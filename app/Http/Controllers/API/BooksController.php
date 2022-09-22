@@ -115,10 +115,10 @@ class BooksController extends BaseController
 
     public function delete(Book $book)
     {
-//        $book->delete();
-//        if (File::exists('img/' . $book->image)) {
-//            unlink('img/' . $book->image);
-//        }
+        $book->delete();
+        if (File::exists('img/' . $book->image)) {
+            unlink('img/' . $book->image);
+        }
         return $this->sendResponse(null, 'Book deleted successfully.');
 
     }
