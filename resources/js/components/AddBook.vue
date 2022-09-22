@@ -13,60 +13,72 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div v-if="strSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="strSuccess">
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="alert"
+                                    type="button"></button>
                             <strong>{{strSuccess}}</strong>
                         </div>
 
-                        <div v-if="strError" class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <strong>{{strError}}</strong>
-                        </div>
+                        <form @submit.prevent="addBook" class="row g-2" enctype="multipart/form-data">
+                            <div class="form-group mb-2 col-6">
+                                <label>Title</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                             v-if="err.title && !books.title">{{err.title}}</span>
+                                <input :class="{ 'border-danger': err.title && !books.title }" class="form-control"
+                                       placeholder="Enter Title" type="text" v-model="books.title">
+                            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Author</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                              v-if="err.author && !books.author">{{err.author}}</span>
+                                <input :class="{ 'border-danger': err.author && !books.author }" class="form-control" placeholder="Enter Author"
+                                       type="text" v-model="books.author">
+                            </div>
+                            <div class="form-group mb-2 col-6">
+                                <label>Genre</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                             v-if="err.genre && !books.genre">{{err.genre}}</span>
+                                <input :class="{ 'border-danger': err.genre&& !books.genre }" class="form-control"
+                                       placeholder="Enter Genre" type="text" v-model="books.genre">
+                            </div>
 
-                        <form class="row g-2" @submit.prevent="addBook" enctype="multipart/form-data">
                             <div class="form-group mb-2 col-6">
-                                <label>Title</label><span class="text-danger"> *</span>
-                                <input type="text" class="form-control" v-model="title" placeholder="Enter Title">
+                                <label>Isbn</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                            v-if="err.isbn && !books.isbn">{{err.isbn}}</span>
+                                <input :class="{ 'border-danger': err.isbn && !books.isbn }" class="form-control"
+                                       placeholder="Enter Isbn" type="text"
+                                       v-model="books.isbn">
                             </div>
                             <div class="form-group mb-2 col-6">
-                                <label>Author</label><span class="text-danger"> *</span>
-                                <input type="text" class="form-control" v-model="author" placeholder="Enter Author">
+                                <label>Published</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                                 v-if="err.published && !books.published">{{err.published}}</span>
+                                <input :class="{ 'border-danger': err.published && !books.published }"
+                                       class="form-control"
+                                       placeholder="Enter Published" type="date"
+                                       v-model="books.published">
                             </div>
                             <div class="form-group mb-2 col-6">
-                                <label>Genre</label><span class="text-danger"> *</span>
-                                <input type="text" class="form-control" v-model="genre" placeholder="Enter Genre">
-                            </div>
-
-                            <div class="form-group mb-2 col-6">
-                                <label>Isbn</label><span class="text-danger"> *</span>
-                                <input type="text" class="form-control" v-model="isbn" placeholder="Enter Isbn">
-                            </div>
-                            <div class="form-group mb-2 col-6">
-                                <label>Published</label><span class="text-danger"> *</span>
-                                <input type="date" class="form-control" v-model="published"
-                                       placeholder="Enter Published">
-                            </div>
-                            <div class="form-group mb-2 col-6">
-                                <label>Publisher</label><span class="text-danger"> *</span>
-                                <input type="text" class="form-control" v-model="publisher"
-                                       placeholder="Enter Publisher">
+                                <label>Publisher</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                                 v-if="err.publisher && !books.publisher">{{err.publisher}}</span>
+                                <input :class="{ 'border-danger': err.publisher && !books.publisher }" class="form-control" placeholder="Enter Publisher"
+                                       type="text"
+                                       v-model="books.publisher">
                             </div>
                             <div class="form-gorup mb-2 col-6">
-                                <label>Image</label>
-                                <input type="file" class="form-control mb-2" v-on:change="onChange">
+                                <label>Image</label> <span class="text-danger" v-if="err.file">{{err.file}}</span>
+                                <input :class="{ 'border-danger': err.file }" class="form-control mb-2" type="file"
+                                       v-on:change="onChange">
 
-                                <div v-if="img">
-                                    <img v-bind:src="imgPreview" width="100" height="100"/>
+                                <div v-if="books.img">
+                                    <img height="100" v-bind:src="imgPreview" width="100"/>
                                 </div>
                             </div>
                             <div class="form-group mb-2 col-12">
-                                <label>Description</label><span class="text-danger"> *</span>
-                                <textarea class="form-control" rows="3" v-model="description"
-                                          placeholder="Enter Description"></textarea>
+                                <label>Description</label><span class="text-danger">*</span> <span class="text-danger"
+                                                                                                   v-if="err.description && !books.description">{{err.description}}</span>
+                                <textarea :class="{ 'border-danger': err.description && !books.description }" class="form-control" placeholder="Enter Description"
+                                          rows="3"
+                                          v-model="books.description"></textarea>
                             </div>
                             <div class="form-group mb-2 col-12">
-                                <button type="submit" class="btn btn-primary mt-4 mb-4 col-2"> Add Book</button>
+                                <button class="btn btn-primary mt-4 mb-4 col-2" type="submit"> Add Book</button>
                             </div>
                         </form>
                     </div>
@@ -80,30 +92,24 @@
     export default {
         data() {
             return {
-                title: '',
-                author: '',
-                genre: '',
-                description: '',
-                isbn: '',
-                img: '',
-                published: '',
-                publisher: '',
+                books: {},
                 strSuccess: '',
-                strError: '',
+                err: {
+                },
                 imgPreview: null
             }
         },
         methods: {
             onChange(e) {
-                this.img = e.target.files[0];
+                this.books.img = e.target.files[0];
                 let reader = new FileReader();
                 reader.addEventListener("load", function () {
                     this.imgPreview = reader.result;
                 }.bind(this), false);
 
-                if (this.img) {
-                    if (/\.(jpe?g|png|gif)$/i.test(this.img.name)) {
-                        reader.readAsDataURL(this.img);
+                if (this.books.img) {
+                    if (/\.(jpe?g|png|gif)$/i.test(this.books.img.name)) {
+                        reader.readAsDataURL(this.books.img);
                     }
                 }
             },
@@ -114,31 +120,28 @@
                         headers: {
                             'content-type': 'multipart/form-data'
                         }
-                    }
+                    };
 
                     const formData = new FormData();
-                    formData.append('title', this.title);
-                    formData.append('description', this.description);
-                    formData.append('author', this.author);
-                    formData.append('genre', this.genre);
-                    formData.append('isbn', this.isbn);
-                    formData.append('published', this.published);
-                    formData.append('publisher', this.publisher);
-                    formData.append('file', this.img);
+                    for (var key in this.books) {
+                        if (key === 'img') {
+                            formData.append('file', this.books.img);
+                        } else {
+                            formData.append(key, this.books[key]);
+                        }
+                    }
 
                     this.$axios.post('/api/books/add', formData, config)
                         .then(response => {
-                            existingObj.strError = "";
+                            existingObj.err = "";
                             existingObj.strSuccess = response.data.message;
                             window.location.href = '/books';
                         })
                         .catch(function (error) {
                             existingObj.strSuccess = "";
-                            var err = "";
-                            error.response.data.data.forEach(function (key) {
-                                err += key;
+                            $.each(error.response.data.errors, function (key, value) {
+                                existingObj.err[key] = value[0];
                             });
-                            existingObj.strError = err;
                         });
                 });
             }

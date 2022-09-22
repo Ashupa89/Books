@@ -17,7 +17,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="profile-img">
-                                        <img v-bind:src="img ? '/img/'+img :'/img_logo.jpeg'" alt="">
+                                        <img v-bind:src="books.img ? books.img :'/img_logo.jpeg'" alt="">
                                         <div class="file btn btn-lg btn-primary">
                                             Image
                                         </div>
@@ -26,10 +26,10 @@
                                 <div class="col-md-6">
                                     <div class="profile-head">
                                         <h5>
-                                            {{title}}
+                                            {{books.title}}
                                         </h5>
                                         <h6>
-                                            {{description}}
+                                            {{books.description}}
                                         </h6>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
@@ -53,7 +53,7 @@
                                                     <label>Author</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p>{{author}}</p>
+                                                    <p>{{books.author}}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -61,7 +61,7 @@
                                                     <label>Published Date</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p>{{published}}</p>
+                                                    <p>{{books.published}}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -69,7 +69,7 @@
                                                     <label>Pushlisher</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p>{{publisher}}</p>
+                                                    <p>{{books.publisher}}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -77,7 +77,7 @@
                                                     <label>Genre</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p>{{genre}}</p>
+                                                    <p>{{books.genre}}</p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -85,7 +85,7 @@
                                                     <label>Isbn</label>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p>{{isbn}}</p>
+                                                    <p>{{books.isbn}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,17 +103,7 @@
     export default {
         data() {
             return {
-                id: '',
-                title: '',
-                author: '',
-                genre: '',
-                description: '',
-                isbn: '',
-                img: '',
-                published: '',
-                publisher: '',
-                strSuccess: '',
-                strError: '',
+                books:{},
                 imgPreview: null
             }
         },
@@ -122,15 +112,9 @@
             this.$axios.get(`/api/books/view/${this.$route.params.id}`)
                 .then(response => {
                     var data = response.data.data;
-                    this.title = data['title'];
-                    this.description = data['description'];
-                    this.author = data['author'];
-                    this.genre = data['genre'];
-                    this.isbn = data['isbn'];
-                    this.published = data['published'];
-                    this.publisher = data['publisher'];
-                    this.img = data['image'];
-                    this.imgPreview = this.img;
+                    this.books = data;
+                    this.books.img = "/img/" + data['image'];
+                    this.imgPreview = this.books.img;
                 })
                 .catch(function (error) {
                     console.log(error);

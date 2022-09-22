@@ -32,7 +32,7 @@ class BooksController extends BaseController
             "publish_date" => 'nullable|date',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error.', $validator->errors()->all());
         }
         $key = $request;
         $book = Book::query();
@@ -58,7 +58,7 @@ class BooksController extends BaseController
 
     public function add(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             "title" => 'required',
             "author" => 'required',
             "genre" => 'required',
@@ -68,9 +68,7 @@ class BooksController extends BaseController
             "publisher" => 'required',
             'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors()->all());
-        }
+
         $input = $request->all();
         $imageName = NULL;
         if ($image = $request->file('file')) {
@@ -92,7 +90,7 @@ class BooksController extends BaseController
     public function update($id, Request $request)
     {
         $book = Book::find($id);
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             "title" => 'required',
             "author" => 'required',
             "genre" => 'required',
@@ -101,19 +99,13 @@ class BooksController extends BaseController
             "published" => 'required',
             "publisher" => 'required',
         ]);
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors()->all());
-        }
 
         $input = $request->all();
         $imageName = NULL;
         if ($image = $request->file('file')) {
-            $validator = Validator::make($request->all(), [
+            $request->validate([
                 'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
-            if ($validator->fails()) {
-                return $this->sendError('Validation Error.', $validator->errors()->all());
-            }
             $destinationPath = 'img/';
             $imageName = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
