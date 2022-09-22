@@ -16,5 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('{any}', function () {
+//    $res=Http::get('https://fakerapi.it/api/v1/books?_quantity=100')->body();
+//
+//    foreach (json_decode($res,true)['data'] as $i =>$value){
+//        if($i==10){
+//        Book::create($value);
+//        }
+//    }
     return view('app');
 })->where('any','.*');
