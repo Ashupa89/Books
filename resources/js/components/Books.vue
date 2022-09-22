@@ -95,8 +95,8 @@
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
-                                <tbody v-if="users && users.data">
-                                <tr :key="index" v-for="(book,index) in users.data">
+                                <tbody v-if="users && users.length>0">
+                                <tr :key="index" v-for="(book,index) in users">
                                     <td>{{book.id }}</td>
                                     <td>
                                         <router-link :to="{name: 'viewbook', params: { id: book.id }}"
@@ -125,7 +125,7 @@
                                 </tbody>
                                 <tbody v-else>
                                 <tr>
-                                    <td align="center" colspan="3">No record found.</td>
+                                    <td align="center" colspan="10">No record found.</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -172,7 +172,8 @@
 
             async list(page = 1) {
                 await axios.get(`/api/books?page=${page}&search=${this.search}`).then(({data}) => {
-                    this.users = data.data;
+                    this.users = data.data.data;
+                    console.log(this.users);
                 }).catch(({response}) => {
                     console.log(response)
                 })
