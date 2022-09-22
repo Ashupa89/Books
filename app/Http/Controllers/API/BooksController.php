@@ -13,46 +13,39 @@ class BooksController extends BaseController
     public function index(Request $request)
     {
         $key = $request->search;
-        $book = Book::where('title', 'LIKE', "%{$key}%")
-            ->orWhere('author', 'LIKE', "%{$key}%")
-            ->orWhere('published', 'LIKE', "%{$key}%")
-            ->orWhere('isbn', 'LIKE', "%{$key}%")
-            ->orWhere('genre', 'LIKE', "%{$key}%")
-            ->paginate(10)->toArray();
-        return $this->sendResponse(array_reverse($book), 'Books retrieved successfully.');
+        $book = Book::search($key)->paginate(10);
+        return $this->sendResponse($book, 'Books retrieved successfully.');
     }
 
     public function filterBook(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             "title" => 'required|string',
             "author" => 'nullable|string',
             "genre" => 'nullable|string',
             "isbn" => 'nullable|integer',
             "publish_date" => 'nullable|date',
         ]);
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors()->all());
-        }
+
         $key = $request;
         $book = Book::query();
         if ($key->title) {
-            $book->where('title', 'LIKE', "%{$key->title}%");
+            $book->filter('title', $key->title);
         }
         if ($key->author) {
-            $book->where('author', 'LIKE', "%{$key->author}%");
+            $book->filter('author', $key->author);
         }
         if ($key->publish_date) {
-            $book->where('published', 'LIKE', "%{$key->publish_date}%");
+            $book->filter('published', $key->publish_date);
         }
         if ($key->isbn) {
-            $book->where('isbn', 'LIKE', "%{$key->isbn}%");
+            $book->filter('isbn', $key->isbn);
         }
         if ($key->genre) {
-            $book->where('genre', 'LIKE', "%{$key->genre}%");
+            $book->filter('genre', $key->genre);
         }
 
-        return $this->sendResponse(array_reverse($book->paginate(10)->toArray()), 'Books retrieved successfully.');
+        return $this->sendResponse($book->paginate(10), 'Books retrieved successfully.');
 
     }
 
@@ -122,10 +115,10 @@ class BooksController extends BaseController
 
     public function delete(Book $book)
     {
-        $book->delete();
-        if (File::exists('img/' . $book->image)) {
-            unlink('img/' . $book->image);
-        }
+//        $book->delete();
+//        if (File::exists('img/' . $book->image)) {
+//            unlink('img/' . $book->image);
+//        }
         return $this->sendResponse(null, 'Book deleted successfully.');
 
     }

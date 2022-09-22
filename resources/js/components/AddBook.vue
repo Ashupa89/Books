@@ -20,33 +20,33 @@
                         </div>
 
                         <form @submit.prevent="addBook" class="row g-2" enctype="multipart/form-data">
-                            <div class="form-group mb-2 col-6">
+                            <div class="form-group mb-2 col-4">
                                 <label>Title</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                              v-if="err.title && !books.title">{{err.title}}</span>
                                 <input :class="{ 'border-danger': err.title && !books.title }" class="form-control"
                                        placeholder="Enter Title" type="text" v-model="books.title">
                             </div>
-                            <div class="form-group mb-2 col-6">
+                            <div class="form-group mb-2 col-4">
                                 <label>Author</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                               v-if="err.author && !books.author">{{err.author}}</span>
                                 <input :class="{ 'border-danger': err.author && !books.author }" class="form-control" placeholder="Enter Author"
                                        type="text" v-model="books.author">
                             </div>
-                            <div class="form-group mb-2 col-6">
+                            <div class="form-group mb-2 col-4">
                                 <label>Genre</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                              v-if="err.genre && !books.genre">{{err.genre}}</span>
                                 <input :class="{ 'border-danger': err.genre&& !books.genre }" class="form-control"
                                        placeholder="Enter Genre" type="text" v-model="books.genre">
                             </div>
 
-                            <div class="form-group mb-2 col-6">
+                            <div class="form-group mb-2 col-4">
                                 <label>Isbn</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                             v-if="err.isbn && !books.isbn">{{err.isbn}}</span>
                                 <input :class="{ 'border-danger': err.isbn && !books.isbn }" class="form-control"
                                        placeholder="Enter Isbn" type="text"
                                        v-model="books.isbn">
                             </div>
-                            <div class="form-group mb-2 col-6">
+                            <div class="form-group mb-2 col-4">
                                 <label>Published</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                                  v-if="err.published && !books.published">{{err.published}}</span>
                                 <input :class="{ 'border-danger': err.published && !books.published }"
@@ -54,14 +54,14 @@
                                        placeholder="Enter Published" type="date"
                                        v-model="books.published">
                             </div>
-                            <div class="form-group mb-2 col-6">
+                            <div class="form-group mb-2 col-4">
                                 <label>Publisher</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                                  v-if="err.publisher && !books.publisher">{{err.publisher}}</span>
                                 <input :class="{ 'border-danger': err.publisher && !books.publisher }" class="form-control" placeholder="Enter Publisher"
                                        type="text"
                                        v-model="books.publisher">
                             </div>
-                            <div class="form-gorup mb-2 col-6">
+                            <div class="form-gorup mb-2 col-4">
                                 <label>Image</label> <span class="text-danger" v-if="err.file">{{err.file}}</span>
                                 <input :class="{ 'border-danger': err.file }" class="form-control mb-2" type="file"
                                        v-on:change="onChange">
@@ -70,7 +70,7 @@
                                     <img height="100" v-bind:src="imgPreview" width="100"/>
                                 </div>
                             </div>
-                            <div class="form-group mb-2 col-12">
+                            <div class="form-group mb-2 col-8">
                                 <label>Description</label><span class="text-danger">*</span> <span class="text-danger"
                                                                                                    v-if="err.description && !books.description">{{err.description}}</span>
                                 <textarea :class="{ 'border-danger': err.description && !books.description }" class="form-control" placeholder="Enter Description"

@@ -7,55 +7,76 @@
                         <div class="d-flex justify-content-between pb-2 mb-2">
                             <h3 class="card-title">Books List</h3>
                             <div>
-                                <router-link :to="{name: 'addbook'}" v-if="permission"
-                                             class="text-right btn btn-outline-primary">Add
+                                <router-link :to="{name: 'addbook'}" class="text-right btn btn-outline-primary"
+                                             v-if="permission">Add
                                     Book
                                 </router-link>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div v-if="strSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="strSuccess">
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="alert"
+                                    type="button"></button>
                             <strong>{{strSuccess}}</strong>
                         </div>
 
-                        <div v-if="strError" class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="strError">
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="alert"
+                                    type="button"></button>
                             <strong>{{strError}}</strong>
                         </div>
 
-                        <form class="row g-2" @submit.prevent="filterBooks" enctype="multipart/form-data">
-                            <div class="form-group mb-4">
+                        <form @submit.prevent="filterBooks" class="row g-2" enctype="multipart/form-data">
+                            <div class="form-group  col-2">
                                 <label>Title<span class="text-danger"> *</span>
-                                    <input type="text" placeholder="Title" v-model="filter.title"
-                                           class="form-control form-control-sm">
+                                    <input class="form-control form-control-sm" placeholder="Title" type="text"
+                                           v-model="filter.title">
                                 </label>
+                                <span class="text-danger"
+                                      v-if="err.title">{{err.title}}</span>
+                            </div>
+                            <div class="form-group col-2">
                                 <label>Author<span class="text-danger"> *</span>
-                                    <input type="text" placeholder="Author" v-model="filter.author"
-                                           class="form-control form-control-sm">
+                                    <input class="form-control form-control-sm" placeholder="Author" type="text"
+                                           v-model="filter.author">
                                 </label>
+                                <span class="text-danger"
+                                      v-if="err.author">{{err.author}}</span>
+                            </div>
+                            <div class="form-group col-2">
+
                                 <label>Published Date<span class="text-danger"> *</span>
-                                    <input type="date" placeholder="Published Date" v-model="filter.publish_date"
-                                           class="form-control form-control-sm">
+                                    <input class="form-control form-control-sm" placeholder="Published Date" type="date"
+                                           v-model="filter.publish_date">
                                 </label>
+                                <span class="text-danger"
+                                      v-if="err.publish_date">{{err.publish_date}}</span>
+                            </div>
+                            <div class="form-group  col-2">
                                 <label>Isbn<span class="text-danger"> *</span>
-                                    <input type="text" placeholder="Isbn" v-model="filter.isbn"
-                                           class="form-control form-control-sm">
+                                    <input class="form-control form-control-sm" placeholder="Isbn" type="text"
+                                           v-model="filter.isbn">
                                 </label>
+                                <span class="text-danger" v-if="err.isbn">{{err.isbn}}</span>
+                            </div>
+                            <div class="form-group  col-2">
                                 <label>Genre<span class="text-danger"> *</span>
-                                    <input type="text" placeholder="Genre" v-model="filter.genre"
-                                           class="form-control form-control-sm">
+                                    <input class="form-control form-control-sm" placeholder="Genre" type="text"
+                                           v-model="filter.genre">
                                 </label>
-                                <button type="submit" class="btn btn-primary"> Filter Book</button>
+                                <span class="text-danger"
+                                      v-if="err.genre">{{err.genre}}</span>
+                            </div>
+                            <div class="form-group col-2" style="margin: auto">
+                                <button class="btn btn-primary" type="submit"> Filter Book</button>
                             </div>
                         </form>
-                        <div class="form-group mb-2">
+                        <div align="right" class="form-group mb-2 col-12">
                             <label align="left">Search<span class="text-danger"> *</span>
-                                <input type="text" @keyup="list" placeholder="Search" v-model="search"
-                                       class="form-control form-control-sm">
+                                <input @keyup="list" class="form-control form-control-sm" placeholder="Search"
+                                       type="text"
+                                       v-model="search">
                             </label>
                         </div>
                         <div class="table-responsive">
@@ -75,7 +96,7 @@
                                 </tr>
                                 </thead>
                                 <tbody v-if="users && users.data">
-                                <tr v-for="(book,index) in users.data" :key="index">
+                                <tr :key="index" v-for="(book,index) in users.data">
                                     <td>{{book.id }}</td>
                                     <td>
                                         <router-link :to="{name: 'viewbook', params: { id: book.id }}"
@@ -86,17 +107,17 @@
                                     <td>{{book.genre }}</td>
                                     <td>{{book.description }}</td>
                                     <td>{{book.isbn }}</td>
-                                    <td><img v-if="book.image" v-bind:src="'/img/'+ book.image" height="64" width="48"
-                                             alt=""></td>
+                                    <td><img alt="" height="64" v-bind:src="'/img/'+ book.image" v-if="book.image"
+                                             width="48"></td>
                                     <td>{{book.published }}</td>
                                     <td>{{book.publisher }}</td>
                                     <td>
-                                        <div v-if="permission" class="btn-group" role="group">
+                                        <div class="btn-group" role="group" v-if="permission">
                                             <router-link :to="{name: 'editbook', params: { id: book.id }}"
                                                          class="btn btn-success">Edit
                                             </router-link>
-                                            <button v-if="permission" class="btn btn-danger"
-                                                    @click="deleteBook(book.id)">Delete
+                                            <button @click="deleteBook(book.id)" class="btn btn-danger"
+                                                    v-if="permission">Delete
                                             </button>
                                         </div>
                                     </td>
@@ -109,7 +130,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <pagination align="center" :data="users" @pagination-change-page="list"></pagination>
+                        <pagination :data="users" @pagination-change-page="list" align="center"></pagination>
                     </div>
                 </div>
             </div>
@@ -140,7 +161,7 @@
                     isbn: ''
                 },
                 strSuccess: '',
-                strError: '',
+                err: {},
                 permission: window.Laravel.isAdmin
             }
         },
@@ -163,7 +184,9 @@
                     this.users = data.data;
                 }).catch(function (error) {
                     existingObj.strSuccess = "";
-                    existingObj.strError = error.response.data.message;
+                    $.each(error.response.data.errors, function (key, value) {
+                        existingObj.err[key] = value[0];
+                    });
                 });
             },
             deleteBook(id) {
@@ -173,10 +196,10 @@
                     this.$axios.delete(`/api/books/delete/${id}`)
                         .then(response => {
 
-                            let i = this.users.map(item => item.id).indexOf(id); // find index of your object
-                            this.users.splice(i, 1);
+                            let i = this.users.data.map(item => item.id).indexOf(id); // find index of your object
+                            this.users.data.splice(i, 1);
                             existingObj.strError = "";
-                            existingObj.strSuccess = response.data.success;
+                            existingObj.strSuccess = response.data.message;
 
                         })
                         .catch(function (error) {
